@@ -35,7 +35,7 @@ To use GAP on a web page, load the client-side JavaScript from the Proxy Service
 
 ```javascript
 <script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsProxyObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','https://xxx.org/javascript/gaproxy.js','gap');
