@@ -47,7 +47,7 @@ gap('send', 'pageview');
 
 The code should be added near the top of the `<head>` tag with the string `'UA-XXXXX-Y'`.
  
-- Replace _property ID_  of the Google Analytics property you wish to track.
+- Replace _UA-XXXXX-Y_  of the Google Analytics property you wish to track.
 - Replace _xxx.org_  with the location of your Proxy Service.
 
 Adding this code will load GAP and also track the current pageview.
