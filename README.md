@@ -38,17 +38,19 @@ To use GAP on a web page, load the client-side JavaScript from the Proxy Service
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://proxyservice.example.org/javascript/gaproxy.js','gap');
+})(window,document,'script','https://xxx.org/javascript/gaproxy.js','gap');
 
 gap('create', 'UA-XXXXX-Y', 'auto');
 gap('send', 'pageview');
 </script>
 ```
 
-The code should be added near the top of the `<head>` tag with the string `'UA-XXXXX-Y'` 
-replaced with the _property ID_  of the Google Analytics property you wish to track.
+The code should be added near the top of the `<head>` tag with the string `'UA-XXXXX-Y'`.
+ 
+- Replace _property ID_  of the Google Analytics property you wish to track.
+- Replace _xxx.org_  with the location of your Proxy Service.
 
-Adding this code will load GAP and track the current pageview.
+Adding this code will load GAP and also track the current pageview.
 
 ### Specifying a Client ID
 
