@@ -5,10 +5,6 @@ const gaConfig = require('./../../config/ga_config.js');
 const crypto = require('crypto');
 const querystring = require('querystring');
 
-function generateCid() {
-  return crypto.randomBytes(20).toString('hex');
-}
-
 /**
  * sendPageView(req, res)
  *
