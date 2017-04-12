@@ -1,9 +1,7 @@
 # Google Analytics Proxy
 
-Google Analytics Proxy (GAP) provides a Proxy Service to Google's
-[Measurement Protocol](Measurement Protocol) and a replacement for Google Analytic's 
-client-side JavaScript 
-([analytics.js](https://developers.google.com/analytics/devguides/collection/analyticsjs/) )
+Google Analytics Proxy (GAP) provides a Proxy Service to Google's [Measurement Protocol](Measurement Protocol) and a replacement for Google Analytic's 
+client-side JavaScript ([analytics.js](https://developers.google.com/analytics/devguides/collection/analyticsjs/) )
 to increase privacy and help prevent data leakage.
 
 To minimize implementation changes, GAP attempts to mirror syntax from _analytics.js_.
