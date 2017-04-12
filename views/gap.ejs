@@ -1,0 +1,203 @@
+var gaProxyApp = {
+  trackingId: '',
+  clientId: '',
+  clientIdCookieName: 'gap.clientId',
+  cookieDomain: '',
+  clientId: '',
+  serviceBaseUrl: '<%= serviceBaseUrl %>',
+
+  collect: function (action, data) {
+    data.trackingId = this.trackingId;
+    data.cookieDomain = this.cookieDomain;
+    data.clientId = this.clientId;
+
+    this.img = document.createElement('img');
+    this.img.src = this.serviceBaseUrl + '/' + action.join('/') + '?' + this.serialize(data);
+  },
+
+  serialize: function (obj) {
+    var str = [];
+    for (var p in obj)
+      if (obj.hasOwnProperty(p) && obj[p]) {
+        str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+      }
+    return str.join('&');
+  },
+
+  processQueue: function (queue) {
+    while (queue.length) {
+      try {
+        this.processQueueElement(queue.shift());
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  },
+
+  processQueueElement: function (element) {
+    var action = element[0];
+
+    switch (action) {
+      case 'create':
+        this.collect([action], this.create(element));
+        break;
+
+      case 'send':
+        this.collect([action, element[1]], this.send(element));
+        break;
+
+      default:
+        throw('Action specified (' + action + ') is not valid.');
+        break;
+    }
+  },
+
+  setCookie: function createCookie (name, value, days) {
+    var expires = '';
+
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = '; expires=' + date.toUTCString();
+    }
+
+    document.cookie = name + '=' + value + expires + '; path=/';
+  },
+
+  readCookie: function readCookie (name) {
+    var nameEQ = name + '=';
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  },
+
+  createGuid: function guid() {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+  },
+
+  checkRequired: function () {
+    if (!this.trackingId || !this.cookieDomain) {
+      throw('Tracking ID and cookie domain was not set.');
+    }
+
+    return true;
+  },
+
+  inferClientId: function(trackingId) {
+    if (this.readCookie(this.clientIdCookieName)) {
+      return this.readCookie(this.clientIdCookieName);
+    }
+
+    this.setCookie(
+      this.clientIdCookieName,
+      this.generateTrackingId(trackingId)
+    )
+  },
+
+  generateTrackingId: function (trackingId) {
+    if (trackingId) {
+      return trackingId;
+    }
+
+    return this.createGuid();
+  },
+
+  create: function (element) {
+    if (!element[1]) {
+      throw('Tracking ID was not specified');
+    }
+
+    this.trackingId = element[1];
+
+    this.clientId = this.inferClientId(element[3]);
+
+    this.cookieDomain = element[2];
+
+    return {
+      trackingId: element[1],
+      cookieDomain: element[2]
+    };
+  },
+
+  send: function (element) {
+    this.checkRequired();
+
+    var sender = {
+      pageView: function (element) {
+        return {
+          host: window.location.hostname,
+          page: element[2] ? element[2] : document.location.pathname + document.location.hash,
+          fieldsObject: element[3]
+        };
+      },
+
+      event: function (element) {
+        if (!element[2].length) {
+          throw('Event category was not specified.')
+        }
+
+        if (!element[3].length) {
+          throw('Event action was not specified.')
+        }
+
+        return {
+          eventCategory: element[2],
+          eventAction: element[3],
+          eventLabel: element[4],
+          eventValue: element[5],
+          fieldsObject: element[6]
+        };
+      }
+    }
+
+    var eventCategory = element[1];
+
+    switch (eventCategory) {
+      case 'pageview':
+        return sender.pageView(element);
+        break;
+
+      case 'event':
+        return sender.event(element);
+        break;
+
+      default:
+        throw('eventCategory specified (' + eventCategory + ') is not valid.');
+        break;
+    }
+  }
+};
+
+(function () {
+  // Check if GAProxy object is set
+  if (!window.gap) {
+    console.error('GAProxy object is not defined.');
+    return false;
+  }
+
+  // Add queue processing functionality
+  window.gap.q.push = function () {
+    Array.prototype.push.apply(this, arguments);
+    gaProxyApp.processQueue(window.gap.q);
+  }
+
+  var lastDocumentUrl = '';
+
+  // Track changes in browser history
+  window.onpopstate = function (event) {
+    if (lastDocumentUrl !== document.location.href) {
+      window.gap('send', 'pageview');
+      lastDocumentUrl = document.location.href;
+    }
+  };
+
+  // Process initial queue events
+  gaProxyApp.processQueue(window.gap.q);
+})();
