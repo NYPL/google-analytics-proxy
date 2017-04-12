@@ -55,7 +55,7 @@ Adding this code will load GAP and track the current pageview.
 You can optionally specify a Client ID to track usage across a browser session:
 
 ```javascript
-ga('create', 'UA-XXXXX-Y', 'auto', '123456-abcde-123456-abcde');
+gap('create', 'UA-XXXXX-Y', 'auto', '123456-abcde-123456-abcde');
 ```
 
 If a Client ID is not specified, a randomly generated Client ID will be generated and saved
