@@ -4,11 +4,11 @@
   "description": "Google Analytics Proxy",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.org/NYPL/google-analytics-proxy"
+    "url": "https://github.com/NYPL/google-analytics-proxy"
   },
   "keywords": [
     "aws lambda",
@@ -24,7 +24,6 @@
     "babel-core": "6.17.0",
     "babel-loader": "6.2.5",
     "babel-preset-es2015": "6.16.0",
-    "body-parser": "1.15.2",
     "dotenv": "^4.0.0",
     "ejs": "^1.0.0",
     "express": "^4.12.3",

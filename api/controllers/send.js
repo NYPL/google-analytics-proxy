@@ -2,8 +2,9 @@
 
 const axios = require('axios');
 const gaConfig = require('./../../config/ga_config.js');
-const crypto = require('crypto');
 const querystring = require('querystring');
+
+const logger = require('winston')
 
 /**
  * sendPageView(req, res)
@@ -33,10 +34,10 @@ function sendPageView(req, res) {
     }
   })
     .then(response => {
-      console.log('Successfully tracked page view (' + payLoad + ').');
+      logger.info('Successfully tracked page view (' + payLoad + ').');
     })
     .catch(response => {
-      console.error('Error tracking pageview: ' + response.message);
+      logger.error('Error tracking pageview: ' + response.message);
     });
 
   res
@@ -81,10 +82,10 @@ function sendEvent(req, res) {
     }
   })
     .then(response => {
-      console.log('Successfully tracked event (' + payLoad + ').');
+      logger.info('Successfully tracked event (' + payLoad + ').');
     })
     .catch(response => {
-      console.error('Error tracking event: ' + response.message);
+      logger.error('Error tracking event: ' + response.message);
     });
 
   res
