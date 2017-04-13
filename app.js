@@ -41,7 +41,7 @@ router.route('/send/event')
   .get(send.sendEvent);
 
 
-if (process.env.LOCAL) {
+if (!process.env.AWS_LAMBDA_FUNCTION_NAME) {
   logger.info('Using ' + process.env.BASE_PATH + ' for base path.');
   logger.info('Server listing on port ' + (process.env.PORT || 3001) + ' at ' + process.env.BASE_PATH + '.');
   app.listen(process.env.PORT || 3001);
