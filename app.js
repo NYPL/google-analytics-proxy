@@ -5,6 +5,7 @@ const express = require('express');
 require('dotenv').config();
 
 const logger = require('winston')
+const minify = require('express-minify');
 
 const create = require('./api/controllers/create.js');
 const send = require('./api/controllers/send.js');
@@ -13,6 +14,7 @@ const javascript = require('./api/controllers/javascript.js');
 const app = express();
 
 app.set('view engine', 'ejs');
+app.use(minify());
 
 logger.info('Using ' + process.env.BASE_PATH + ' for base path.');
 
