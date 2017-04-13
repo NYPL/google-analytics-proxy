@@ -1,3 +1,6 @@
+const cloudwatch = require('./../helpers/cloudwatch')
+const gaConfig = require('./../../config/ga_config.js');
+
 /**
  * create(req, res)
  *
@@ -10,9 +13,11 @@ function create(req, res) {
     .header('Content-Type', 'image/gif')
     .header('Access-Control-Allow-Origin', '*')
     .header('Cache-Control', 'no-cache, no-store, must-revalidate')
-    .sendFile('collect.gif', {
-      root: __dirname + '/../../static'
-    });
+    .send();
+
+  if (req.query.firstVisit) {
+    cloudwatch.recordMetric(req, gaConfig.visitMetricName);
+  }
 }
 
 module.exports = {

@@ -16,8 +16,6 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(minify());
 
-logger.info('Using ' + process.env.BASE_PATH + ' for base path.');
-
 app.options('*', function (req, res) {
   res
     .status(200)
@@ -42,7 +40,11 @@ router.route('/send/pageview')
 router.route('/send/event')
   .get(send.sendEvent);
 
-logger.info('Server listing on port ' + (process.env.PORT || 3001) + ' at ' + process.env.BASE_PATH + '.');
-app.listen(process.env.PORT || 3001);
+
+if (process.env.LOCAL) {
+  logger.info('Using ' + process.env.BASE_PATH + ' for base path.');
+  logger.info('Server listing on port ' + (process.env.PORT || 3001) + ' at ' + process.env.BASE_PATH + '.');
+  app.listen(process.env.PORT || 3001);
+}
 
 module.exports = app;

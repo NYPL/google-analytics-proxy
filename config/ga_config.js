@@ -1,3 +1,5 @@
 module.exports = {
-  googleBaseUrl: 'https://www.google-analytics.com'
+  googleBaseUrl: 'https://www.google-analytics.com',
+  visitMetricName: 'Visit',
+  pageViewMetricName: 'PageView'
 };

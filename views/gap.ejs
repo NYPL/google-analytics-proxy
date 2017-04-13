@@ -1,6 +1,8 @@
 var gaProxyApp = {
-  trackingId: '',
+  firstVisit: false,
   clientId: '',
+  metricNameSpace: '',
+  trackingId: '',
   clientIdCookieName: 'gap.clientId',
   cookieDomain: '',
   clientId: '',
@@ -10,6 +12,7 @@ var gaProxyApp = {
     data.trackingId = this.trackingId;
     data.cookieDomain = this.cookieDomain;
     data.clientId = this.clientId;
+    data.metricNameSpace = this.metricNameSpace;
 
     this.img = document.createElement('img');
     this.img.src = this.serviceBaseUrl + '/' + action.join('/') + '?' + this.serialize(data);
@@ -38,6 +41,10 @@ var gaProxyApp = {
     var action = element[0];
 
     switch (action) {
+      case 'init':
+        this.init(element);
+        break;
+
       case 'create':
         this.collect([action], this.create(element));
         break;
@@ -95,6 +102,8 @@ var gaProxyApp = {
       return this.readCookie(this.clientIdCookieName);
     }
 
+    this.firstVisit = true;
+
     this.setCookie(
       this.clientIdCookieName,
       this.generateTrackingId(trackingId)
@@ -116,14 +125,23 @@ var gaProxyApp = {
 
     this.trackingId = element[1];
 
-    this.clientId = this.inferClientId(element[3]);
+    if (!this.clientId) {
+      this.clientId = this.inferClientId();
+    }
 
     this.cookieDomain = element[2];
 
     return {
       trackingId: element[1],
-      cookieDomain: element[2]
+      cookieDomain: element[2],
+      firstVisit: this.firstVisit
     };
+  },
+
+  init: function (element) {
+    this.metricNameSpace = element[1];
+
+    this.clientId = this.inferClientId(element[2]);
   },
 
   send: function (element) {

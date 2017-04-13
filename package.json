@@ -19,16 +19,16 @@
   "author": "NYPL Digital Team",
   "license": "",
   "dependencies": {
+    "aws-sdk": "^2.41.0",
     "aws-serverless-express": "^2.1.3",
     "axios": "0.15.3",
-    "babel-core": "6.17.0",
-    "babel-loader": "6.2.5",
-    "babel-preset-es2015": "6.16.0",
     "dotenv": "^4.0.0",
     "ejs": "^1.0.0",
     "express": "^4.12.3",
+    "express-minify": "^0.2.0",
     "serverless": "^1.9.0",
-    "serverless-plugin-write-env-vars": "^1.0.1"
+    "serverless-plugin-write-env-vars": "^1.0.1",
+    "winston": "^2.3.1"
   },
   "devDependencies": {
     "supertest": "1.0.0"

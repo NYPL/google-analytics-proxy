@@ -3,8 +3,27 @@
 const axios = require('axios');
 const gaConfig = require('./../../config/ga_config.js');
 const querystring = require('querystring');
+const cloudwatch = require('./../helpers/cloudwatch')
 
 const logger = require('winston')
+
+/**
+ * checkRequiredParameters(req)
+ *
+ * @param {req} HTTP request
+ */
+function checkMinimumParameters (req) {
+  if (!req.query.trackingId) throw new Error('Tracking ID was not specified.')
+  if (!req.query.clientId) throw new Error('Client ID was not specified.')
+}
+
+/**
+ * getReturnPixel(req)
+ *
+ * @return string
+ */
+function getReturnPixel () {
+}
 
 /**
  * sendPageView(req, res)
@@ -12,10 +31,10 @@ const logger = require('winston')
  * @param {req} HTTP request
  * @param {res} HTTP response
  */
-function sendPageView(req, res) {
-  if (!req.query.trackingId) throw new Error('Tracking ID was not specified.')
+function sendPageView (req, res) {
+  checkMinimumParameters(req);
+
   if (!req.query.page) throw new Error('Page was not specified.')
-  if (!req.query.clientId) throw new Error('Client ID was not specified.')
 
   let payLoad = querystring.stringify({
     v: 1,
@@ -30,8 +49,7 @@ function sendPageView(req, res) {
     method: 'post',
     url: gaConfig.googleBaseUrl + '/collect',
     data: payLoad,
-    headers: {
-    }
+    headers: {}
   })
     .then(response => {
       logger.info('Successfully tracked page view (' + payLoad + ').');
@@ -45,9 +63,9 @@ function sendPageView(req, res) {
     .header('Content-Type', 'image/gif')
     .header('Cache-Control', 'no-cache, no-store, must-revalidate')
     .header('Access-Control-Allow-Origin', '*')
-    .sendFile('collect.gif', {
-      root: __dirname + '/../../static'
-    })
+    .send(getReturnPixel());
+
+  cloudwatch.recordMetric(req, gaConfig.pageViewMetricName);
 }
 
 /**
@@ -56,11 +74,11 @@ function sendPageView(req, res) {
  * @param {req} HTTP request
  * @param {res} HTTP response
  */
-function sendEvent(req, res) {
-  if (!req.query.trackingId) throw new Error('Tracking ID was not specified.')
+function sendEvent (req, res) {
+  checkMinimumParameters(req);
+
   if (!req.query.eventCategory) throw new Error('Event category was not specified.')
   if (!req.query.eventAction) throw new Error('Event action was not specified.')
-  if (!req.query.clientId) throw new Error('Client ID was not specified.')
 
   let payLoad = querystring.stringify({
     v: 1,
@@ -78,8 +96,7 @@ function sendEvent(req, res) {
     method: 'post',
     url: gaConfig.googleBaseUrl + '/collect',
     data: payLoad,
-    headers: {
-    }
+    headers: {}
   })
     .then(response => {
       logger.info('Successfully tracked event (' + payLoad + ').');
@@ -93,9 +110,9 @@ function sendEvent(req, res) {
     .header('Content-Type', 'image/gif')
     .header('Cache-Control', 'no-cache, no-store, must-revalidate')
     .header('Access-Control-Allow-Origin', '*')
-    .sendFile('collect.gif', {
-      root: __dirname + '/../../static'
-    });
+    .send(getReturnPixel());
+
+  cloudwatch.recordMetric(req, gaConfig.pageViewMetricName);
 }
 
 module.exports = {
