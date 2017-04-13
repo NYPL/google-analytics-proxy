@@ -111,9 +111,10 @@ PACKAGE_DIRECTORY=build
 
 To get your AWS Lambda service credentials, please visit [AWS Lambda's website](https://aws.amazon.com/lambda/).
 
-After set up the ".env", run
-```sh
-$ npm run package-deploy
+Then run:
+
+```
+node-lambda deploy --functionName googleAnalyticsProxy --environment development --configFile deploy.env
 ```
 
 It will deploy your server as a Lambda instance to your AWS account.
