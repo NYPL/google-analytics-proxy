@@ -79,7 +79,7 @@ Documentation for additional pageview parameters is available from the
 
 ### Tracking Events
 
-vent hits can be sent using the send command and specifying a hitType of event. The send command has the following signature for the event hit type:
+Event hits can be sent using the send command and specifying a hitType of event. The send command has the following signature for the event hit type:
 
 ```javascript
 gap('send', 'event', [eventCategory], [eventAction], [eventLabel], [eventValue], [fieldsObject]);
