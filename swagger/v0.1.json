@@ -1,0 +1,210 @@
+
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.1",
+    "title": "Google Analytics Proxy API"
+  },
+  "host": "api.nypltech.org",
+  "basePath": "/api",
+  "schemes": [
+    "https"
+  ],
+  "tags": [
+    {
+      "name": "gaproxy",
+      "description": "Google Analytics Proxy API"
+    }
+  ],
+  "paths": {
+    "/v0.1/javascript/gaproxy.js": {
+      "get": {
+        "tags": [
+          "gaproxy"
+        ],
+        "summary": "Generate a JavaScript tracking snippet (gaproxy.js)",
+        "description": "See: https://developers.google.com/analytics/devguides/collection/analyticsjs/#the_javascript_tracking_snippet",
+        "produces": [
+          "application/javascript"
+        ],
+        "responses": {
+          "200": {
+            "description": "JavaScript tracking snippet",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "/v0.1/ga-proxy/create": {
+      "get": {
+        "tags": [
+          "gaproxy"
+        ],
+        "summary": "Create a Tracker object",
+        "description": "See: https://developers.google.com/analytics/devguides/collection/analyticsjs/creating-trackers",
+        "parameters": [
+          {
+            "name": "trackingId",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "cookieDomain",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "clientId",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "metricNameSpace",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "image/gif"
+        ],
+        "responses": {
+          "200": {
+            "description": "A 1x1 pixel in GIF format"
+          }
+        }
+      }
+    },
+    "/v0.1/ga-proxy/send/pageview": {
+      "get": {
+        "tags": [
+          "gaproxy"
+        ],
+        "summary": "Send page tracking information",
+        "description": "See: https://developers.google.com/analytics/devguides/collection/analyticsjs/pages",
+        "parameters": [
+          {
+            "name": "trackingId",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "cookieDomain",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "clientId",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "metricNameSpace",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "host",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "image/gif"
+        ],
+        "responses": {
+          "200": {
+            "description": "A 1x1 pixel in GIF format"
+          }
+        }
+      }
+    },
+    "/v0.1/ga-proxy/send/event": {
+      "get": {
+        "tags": [
+          "gaproxy"
+        ],
+        "summary": "Send an event",
+        "description": "See: https://developers.google.com/analytics/devguides/collection/analyticsjs/events",
+        "parameters": [
+          {
+            "name": "trackingId",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "cookieDomain",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "clientId",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "metricNameSpace",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "metricNameSpace",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "eventCategory",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "eventAction",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "eventLabel",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "eventValue",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "image/gif"
+        ],
+        "responses": {
+          "200": {
+            "description": "A 1x1 pixel in GIF format"
+          }
+        }
+      }
+    }
+  }
+}
