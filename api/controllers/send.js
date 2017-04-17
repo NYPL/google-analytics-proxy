@@ -36,19 +36,19 @@ function sendPageView (req, res) {
 
   if (!req.query.page) throw new Error('Page was not specified.')
 
-  let payLoad = querystring.stringify({
+  let payLoad = {
     v: 1,
     tid: req.query.trackingId,
     cid: req.query.clientId,
     t: 'pageview',
     dh: req.query.host,
     dp: req.query.page
-  });
+  };
 
   axios({
     method: 'post',
     url: gaConfig.googleBaseUrl + '/collect',
-    data: payLoad,
+    data: querystring.stringify(payLoad),
     headers: {}
   })
     .then(response => {
@@ -80,14 +80,14 @@ function sendEvent (req, res) {
   if (!req.query.eventCategory) throw new Error('Event category was not specified.')
   if (!req.query.eventAction) throw new Error('Event action was not specified.')
 
-  let payLoad = querystring.stringify({
+  let payLoad = {
     v: 1,
     tid: req.query.trackingId,
     cid: req.query.clientId,
     t: 'event',
     ec: req.query.eventCategory,
     ea: req.query.eventAction
-  });
+  };
 
   if (req.query.eventLabel) payLoad.el = req.query.eventLabel
   if (req.query.eventValue) payLoad.ev = req.query.eventValue
@@ -95,7 +95,7 @@ function sendEvent (req, res) {
   axios({
     method: 'post',
     url: gaConfig.googleBaseUrl + '/collect',
-    data: payLoad,
+    data: querystring.stringify(payLoad),
     headers: {}
   })
     .then(response => {

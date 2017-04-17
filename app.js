@@ -28,6 +28,15 @@ app.options('*', function (req, res) {
 let router = express.Router();
 app.use(process.env.BASE_PATH, router);
 
+router.route('/swagger')
+  .get(function (req, res) {
+    res
+      .status(200)
+      .header('Access-Control-Allow-Headers', 'Content-Type')
+      .header('Access-Control-Allow-Origin', '*')
+      .sendFile(__dirname + '/swagger/v0.1.json');
+  });
+
 router.route('/javascript/gaproxy.js')
   .get(javascript.getJavascript);
 
