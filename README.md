@@ -58,10 +58,10 @@ Adding this code will load GAP and track the current pageview.
 To optionally control how the client-side cookie is set, pass a cookie fields object:
 
 ```javascript
-ga('create', 'UA-XXXXX-Y', {
-  'clientId': '76c24efd-ec42-492a-92df-c62cfd4540a3',
-  'cookieDomain': 'example.org',
-  'cookieExpires': 60 * 60 * 24  // Time in seconds (1 day)
+gap('create', 'UA-XXXXX-Y', {
+  clientId: '76c24efd-ec42-492a-92df-c62cfd4540a3',
+  cookieDomain: 'example.org',
+  cookieExpires: 60 * 60 * 24  // Time in seconds (1 day)
 });
 ```
 
