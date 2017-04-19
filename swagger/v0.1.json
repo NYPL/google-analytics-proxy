@@ -93,12 +93,6 @@
             "type": "string"
           },
           {
-            "name": "cookieDomain",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "clientId",
             "in": "query",
             "required": true,
@@ -143,12 +137,6 @@
         "parameters": [
           {
             "name": "trackingId",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "cookieDomain",
             "in": "query",
             "required": true,
             "type": "string"

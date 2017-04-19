@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 /**
- * create(req, res)
+ * getJavascript(req, res)
  *
  * @param {req} HTTP request
  * @param {res} HTTP response

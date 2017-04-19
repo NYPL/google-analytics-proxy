@@ -1,7 +1,6 @@
-const logger = require('winston')
-
 const AWS = require('aws-sdk');
 const cloudwatch = new AWS.CloudWatch();
+const gaConfig = require('./../../config/ga_config.js');
 
 function recordMetric(req, metricName) {
   if (!req.query.metricNameSpace) {
@@ -20,11 +19,11 @@ function recordMetric(req, metricName) {
 
   cloudwatch.putMetricData(params, function(err, data) {
     if (err) {
-      logger.error(err, err.stack);
+      gaConfig.logger.error(err, err.stack);
       return false;
     }
 
-    logger.info('Recorded CloudWatch metric: ' + req.query.metricNameSpace + ':' + metricName);
+    gaConfig.logger.info('Recorded CloudWatch metric: ' + req.query.metricNameSpace + ':' + metricName);
     return true;
   });
 }

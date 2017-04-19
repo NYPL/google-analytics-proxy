@@ -1,16 +1,13 @@
 var gaProxyApp = {
-  firstVisit: false,
   clientId: '',
   metricNameSpace: '',
+  isFirstVisit: false,
   trackingId: '',
   clientIdCookieName: 'gap.clientId',
-  cookieDomain: '',
-  clientId: '',
   serviceBaseUrl: '<%= serviceBaseUrl %>',
 
   collect: function (action, data) {
     data.trackingId = this.trackingId;
-    data.cookieDomain = this.cookieDomain;
     data.clientId = this.clientId;
     data.metricNameSpace = this.metricNameSpace;
 
@@ -59,19 +56,19 @@ var gaProxyApp = {
     }
   },
 
-  setCookie: function createCookie (name, value, days) {
+  setCookie: function (name, value, secondsExpire) {
     var expires = '';
 
-    if (days) {
+    if (secondsExpire) {
       var date = new Date();
-      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      date.setTime(date.getTime() + (secondsExpire * 1000));
       expires = '; expires=' + date.toUTCString();
     }
 
     document.cookie = name + '=' + value + expires + '; path=/';
   },
 
-  readCookie: function readCookie (name) {
+  readCookie: function (name) {
     var nameEQ = name + '=';
     var ca = document.cookie.split(';');
     for (var i = 0; i < ca.length; i++) {
@@ -82,40 +79,50 @@ var gaProxyApp = {
     return null;
   },
 
-  createGuid: function guid() {
-    function s4() {
+  createGuid: function () {
+    function s4 () {
       return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     }
+
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
   },
 
   checkRequired: function () {
-    if (!this.trackingId || !this.cookieDomain) {
-      throw('Tracking ID and cookie domain was not set.');
+    if (!this.trackingId) {
+      throw('Tracking ID was not set.');
     }
 
     return true;
   },
 
-  inferClientId: function(trackingId) {
+  inferFirstVisit: function () {
+    return !this.readCookie(this.clientIdCookieName);
+  },
+
+  inferClientId: function (cookieFields) {
+    if (cookieFields.clientId) {
+      return cookieFields.clientId;
+    }
+
     if (this.readCookie(this.clientIdCookieName)) {
       return this.readCookie(this.clientIdCookieName);
     }
 
-    this.firstVisit = true;
-
-    this.setCookie(
-      this.clientIdCookieName,
-      this.generateTrackingId(trackingId)
-    )
+    return this.generateClientId();
   },
 
-  generateTrackingId: function (trackingId) {
-    if (trackingId) {
-      return trackingId;
+  inferSecondsExpire: function (cookieFields) {
+    if (typeof cookieFields === 'object') {
+      return cookieFields.cookieExpires;
     }
+  },
 
+  generateClientId: function () {
     return this.createGuid();
+  },
+
+  init: function (element) {
+    this.metricNameSpace = element[1];
   },
 
   create: function (element) {
@@ -125,23 +132,22 @@ var gaProxyApp = {
 
     this.trackingId = element[1];
 
-    if (!this.clientId) {
-      this.clientId = this.inferClientId();
-    }
+    this.clientId = this.inferClientId(element[2]);
 
-    this.cookieDomain = element[2];
+    this.isFirstVisit = this.inferFirstVisit();
+
+    if (this.isFirstVisit) {
+      this.setCookie(
+        this.clientIdCookieName,
+        this.clientId,
+        this.inferSecondsExpire(element[2])
+      );
+    }
 
     return {
       trackingId: element[1],
-      cookieDomain: element[2],
-      firstVisit: this.firstVisit
+      firstVisit: this.isFirstVisit
     };
-  },
-
-  init: function (element) {
-    this.metricNameSpace = element[1];
-
-    this.clientId = this.inferClientId(element[2]);
   },
 
   send: function (element) {
@@ -196,7 +202,7 @@ var gaProxyApp = {
 (function () {
   // Check if GAProxy object is set
   if (!window.gap) {
-    console.error('GAProxy object is not defined.');
+    console.error('GA proxy object is not defined.');
     return false;
   }
 

@@ -48,16 +48,29 @@ gap('send', 'pageview');
 The code should be added near the top of the `<head>` tag with the string `'UA-XXXXX-Y'`.
  
 - Replace _UA-XXXXX-Y_  of the Google Analytics property you wish to track.
-- Replace _xxx.org_  with the location of your Proxy Service client-side JavaScript.
+- Replace _xxx.org_  with the location of your GAP client-side JavaScript.
+- Optionally, replace _auto_  with a cookie fields object (see below). 
 
 Adding this code will load GAP and track the current pageview.
+
+### Specifying Cookie Fields
+
+To optionally control how the client-side cookie is set, pass a cookie fields object:
+
+```javascript
+ga('create', 'UA-XXXXX-Y', {
+  'clientId': '76c24efd-ec42-492a-92df-c62cfd4540a3',
+  'cookieDomain': 'example.org',
+  'cookieExpires': 60 * 60 * 24  // Time in seconds (1 day)
+});
+```
 
 ### Initializing GAP Parameters
 
 You can optionally specify GAP parameters:
 
 ```javascript
-gap('init', 'MetricNameSpace', '123456-abcde-123456-abcde');
+gap('init', 'MetricNameSpace');
 ```
 
 - Replace _MetricNameSpace_ with the namespace to be used for metrics.

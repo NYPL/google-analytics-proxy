@@ -5,8 +5,6 @@ const gaConfig = require('./../../config/ga_config.js');
 const querystring = require('querystring');
 const cloudwatch = require('./../helpers/cloudwatch')
 
-const logger = require('winston')
-
 /**
  * checkRequiredParameters(req)
  *
@@ -52,10 +50,10 @@ function sendPageView (req, res) {
     headers: {}
   })
     .then(response => {
-      logger.info('Successfully tracked page view (' + payLoad + ').');
+      gaConfig.logger.info('Successfully tracked page view (' + req.query.page + ').');
     })
     .catch(response => {
-      logger.error('Error tracking pageview: ' + response.message);
+      gaConfig.logger.error('Error tracking pageview: ' + response.message);
     });
 
   res
@@ -99,10 +97,10 @@ function sendEvent (req, res) {
     headers: {}
   })
     .then(response => {
-      logger.info('Successfully tracked event (' + payLoad + ').');
+      gaConfig.logger.info('Successfully tracked event (' + req.query.eventCategory + ').');
     })
     .catch(response => {
-      logger.error('Error tracking event: ' + response.message);
+      gaConfig.logger.error('Error tracking event: ' + response.message);
     });
 
   res
