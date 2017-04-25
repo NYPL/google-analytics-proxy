@@ -17,7 +17,7 @@
     }
   ],
   "paths": {
-    "/v0.1/javascript/gaproxy.js": {
+    "/v0.1/ga-proxy/javascript/gaproxy.js": {
       "get": {
         "tags": [
           "gaproxy"

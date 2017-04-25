@@ -10,12 +10,14 @@ const gaConfig = require('./../../config/ga_config.js');
 function create(req, res) {
   res
     .status(200)
-    .header('Content-Type', 'image/gif')
     .header('Access-Control-Allow-Origin', '*')
+    .header('Access-Control-Allow-Headers', 'Content-Type')
     .header('Cache-Control', 'no-cache, no-store, must-revalidate')
-    .send();
+    .sendFile(gaConfig.pixelPath);
 
   if (req.query.firstVisit) {
+    gaConfig.logger.info(req.query, 'Successfully tracked first visit');
+
     cloudwatch.recordMetric(req, gaConfig.visitMetricName);
   }
 }

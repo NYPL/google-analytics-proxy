@@ -16,14 +16,6 @@ function checkMinimumParameters (req) {
 }
 
 /**
- * getReturnPixel(req)
- *
- * @return string
- */
-function getReturnPixel () {
-}
-
-/**
  * sendPageView(req, res)
  *
  * @param {req} HTTP request
@@ -50,18 +42,18 @@ function sendPageView (req, res) {
     headers: {}
   })
     .then(response => {
-      gaConfig.logger.info('Successfully tracked page view (' + req.query.page + ').');
+      gaConfig.logger.info(payLoad, 'Successfully tracked page view');
     })
     .catch(response => {
-      gaConfig.logger.error('Error tracking pageview: ' + response.message);
+      gaConfig.logger.error(payLoad, response, 'Error tracking pageview');
     });
 
   res
     .status(200)
-    .header('Content-Type', 'image/gif')
     .header('Cache-Control', 'no-cache, no-store, must-revalidate')
     .header('Access-Control-Allow-Origin', '*')
-    .send(getReturnPixel());
+    .header('Access-Control-Allow-Headers', 'Content-Type')
+    .sendFile(gaConfig.pixelPath);
 
   cloudwatch.recordMetric(req, gaConfig.pageViewMetricName);
 }
@@ -97,18 +89,18 @@ function sendEvent (req, res) {
     headers: {}
   })
     .then(response => {
-      gaConfig.logger.info('Successfully tracked event (' + req.query.eventCategory + ').');
+      gaConfig.logger.info(payLoad, 'Successfully tracked event');
     })
     .catch(response => {
-      gaConfig.logger.error('Error tracking event: ' + response.message);
+      gaConfig.logger.error(payLoad, response, 'Error tracking event');
     });
 
   res
     .status(200)
-    .header('Content-Type', 'image/gif')
     .header('Cache-Control', 'no-cache, no-store, must-revalidate')
     .header('Access-Control-Allow-Origin', '*')
-    .send(getReturnPixel());
+    .header('Access-Control-Allow-Headers', 'Content-Type')
+    .sendFile(gaConfig.pixelPath);
 
   cloudwatch.recordMetric(req, gaConfig.pageViewMetricName);
 }

@@ -1,14 +1,12 @@
-const winston = require('winston');
+const bunyan = require('bunyan')
+const path = require('path');
 
 module.exports = {
   googleBaseUrl: 'https://www.google-analytics.com',
   visitMetricName: 'Visit',
   pageViewMetricName: 'PageView',
-  logger: new winston.Logger({
-    transports: [
-      new winston.transports.Console({
-        json: true
-      })
-    ]
-  })
+  logger: bunyan.createLogger({
+    name: 'App'
+  }),
+  pixelPath: path.resolve(__dirname + '/../static/collect.gif')
 };

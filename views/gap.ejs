@@ -10,6 +10,7 @@ var gaProxyApp = {
     data.trackingId = this.trackingId;
     data.clientId = this.clientId;
     data.metricNameSpace = this.metricNameSpace;
+    data.c = new Date().getTime();
 
     this.img = document.createElement('img');
     this.img.src = this.serviceBaseUrl + '/' + action.join('/') + '?' + this.serialize(data);
