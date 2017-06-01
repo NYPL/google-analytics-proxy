@@ -1,6 +1,7 @@
 'use strict'
 
 const express = require('express')
+const morgan = require('morgan')
 
 require('dotenv').config()
 
@@ -14,6 +15,8 @@ const javascript = require('./api/controllers/javascript.js')
 const app = express()
 
 app.set('view engine', 'ejs')
+app.enable('trust proxy');
+app.disable('x-powered-by')
 app.use(minify())
 
 app.options('*', function (req, res) {
@@ -25,6 +28,7 @@ app.options('*', function (req, res) {
 })
 
 let router = express.Router()
+app.use(morgan('combined'));
 app.use(process.env.BASE_PATH, router)
 
 router.route('/swagger')
@@ -50,7 +54,7 @@ router.route('/send/event')
 
 if (!process.env.AWS_LAMBDA_FUNCTION_NAME) {
   gaConfig.logger.info('Using ' + process.env.BASE_PATH + ' for base path.')
-  gaConfig.logger.info('Server listing on port ' + (process.env.PORT || 3001) + ' at ' + process.env.BASE_PATH + '.')
+  gaConfig.logger.info('Server listening on port ' + (process.env.PORT || 3001) + ' at ' + process.env.BASE_PATH + '.')
   app.listen(process.env.PORT || 3001)
 }
 

@@ -15,6 +15,15 @@ function checkMinimumParameters (req) {
   if (!req.query.clientId) throw new Error('Client ID was not specified.')
 }
 
+function _extractClientIP(req) {
+    var clientIP = req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress || '';
+
+    return clientIP.split(',')[0];
+}
+
 /**
  * sendPageView(req, res)
  *
@@ -31,6 +40,8 @@ function sendPageView (req, res) {
     tid: req.query.trackingId,
     cid: req.query.clientId,
     t: 'pageview',
+    uip: _extractClientIP(req),
+    ua: req.get('User-Agent'),
     dh: req.query.host,
     dp: req.query.page
   };
@@ -75,9 +86,13 @@ function sendEvent (req, res) {
     tid: req.query.trackingId,
     cid: req.query.clientId,
     t: 'event',
+    uip: _extractClientIP(req),
+    ua: req.get('User-Agent'),
     ec: req.query.eventCategory,
     ea: req.query.eventAction
   };
+
+
 
   if (req.query.eventLabel) payLoad.el = req.query.eventLabel
   if (req.query.eventValue) payLoad.ev = req.query.eventValue
