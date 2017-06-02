@@ -24,7 +24,7 @@ function _getHost(req) {
 function _buildServiceBaseUrl(req) {
     if (process.env.SERVICE_DYNAMIC_BASE_URL == 'true') {
         // This unfortunately only works on port 80 or by luck on other ports
-        return req.protocol + '://' + _getHost(req) + process.env.SERVICE_BASE_URL
+        return 'https://' + _getHost(req) + process.env.SERVICE_BASE_URL
     } else {
         return process.env.SERVICE_BASE_URL
     }
